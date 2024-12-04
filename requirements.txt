@@ -1,3 +1,7 @@
 flask
 flask_sqlalchemy
 gunicorn
+
+git add requirements.txt
+git commit -m "Add flask to requirements.txt"
+git push
