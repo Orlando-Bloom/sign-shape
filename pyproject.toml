@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "your-app"
+name = "app.py"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Anthony <anthonyespino@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.13.0"
 flask = "^3.1"
 flask_sqlalchemy = "^3.1"
 gunicorn = "^23.0"
