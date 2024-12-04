@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Forum Board</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Forum Board</h1>
+        <a href="/new">Create New Post</a>
+        <hr>
+        {% for post in posts %}
+            <div class="post">
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.content }}</p>
+                {% if post.media %}
+                    {% if post.media.endswith(('jpg', 'png', 'jpeg', 'gif')) %}
+                        <img src="{{ post.media }}" alt="Post Media">
+                    {% elif post.media.endswith(('mp4', 'webm', 'ogg')) %}
+                        <video src="{{ post.media }}" controls></video>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="footer">
+            <p>&copy; 2024 Your Forum Board</p>
+        </div>
+    </div>
+</body>
+</html>
