@@ -6,9 +6,10 @@ authors = ["Anthony <anthonyespino@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.11.0"
-flask = "^3.1"
-flask_sqlalchemy = "^3.1"
-gunicorn = "^23.0"
+flask = "3.1.0"
+flask_sqlalchemy = "3.1.1"
+gunicorn = "23.0.0"
+sqlalchemy = "2.0.36"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
