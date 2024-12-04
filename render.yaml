@@ -2,6 +2,9 @@ services:
   - type: web
     name: my-python-app
     env: python
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.7
     plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
