@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SECRET_KEY'] = 'your_secret_key_here'
-app.config['UPLOAD_FOLDER'] = './static/uploads'
+app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'static/uploads')
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # Limit uploads to 10MB
 
 db = SQLAlchemy(app)
