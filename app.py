@@ -29,13 +29,14 @@ def new_post():
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
-        file = request.files.get('media')  # Use `.get()` to avoid KeyError
-if file and file.filename != '':
-    filename = secure_filename(file.filename)
-    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    media_path = f"static/uploads/{filename}"
-else:
-    media_path = None
+        file = request.files['media']
+
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            media_path = f"static/uploads/{filename}"
+        else:
+            media_path = None
 
         new_post = Post(title=title, content=content, media=media_path)
         db.session.add(new_post)
