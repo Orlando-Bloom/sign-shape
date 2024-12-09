@@ -1,15 +1,21 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate  # Import Flask-Migrate
 from werkzeug.utils import secure_filename
 import os
 
+# App configuration
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SECRET_KEY'] = 'your_secret_key_here'
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'static/uploads')
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # Limit uploads to 10MB
 
+# Initialize database
 db = SQLAlchemy(app)
+
+# Initialize Flask-Migrate
+migrate = Migrate(app, db)
 
 # Database Model
 class Post(db.Model):
@@ -17,6 +23,7 @@ class Post(db.Model):
     title = db.Column(db.String(150), nullable=False)
     content = db.Column(db.Text, nullable=False)
     media = db.Column(db.String(300), nullable=True)
+    username = db.Column(db.String(50), nullable=False, default="Anonymous")  # Field for username
 
 # Routes
 @app.route('/')
@@ -25,10 +32,11 @@ def index():
     return render_template('index.html', posts=posts)
 
 @app.route('/new', methods=['GET', 'POST'])
-def new_post():
+def new_post():  # Corrected: Assign the new_post function to /new
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
+        username = request.form.get('username', 'Anonymous')  # Handle username input
 
         # Handle file upload safely
         file = request.files.get('media')  # Use `.get()` to avoid KeyError
@@ -40,7 +48,7 @@ def new_post():
             media_path = None
 
         # Create and save the new post
-        new_post = Post(title=title, content=content, media=media_path)
+        new_post = Post(title=title, content=content, username=username, media=media_path)
         db.session.add(new_post)
         db.session.commit()
 
@@ -49,10 +57,8 @@ def new_post():
 
     return render_template('post.html')
 
-
-# New Admin Route for Managing Posts
 @app.route('/admin', methods=['GET', 'POST'])
-def admin():
+def admin():  # This now only handles the /admin route
     admin_password = "Iamtooc00l!"  # Change this to a secure password
 
     # Basic password protection
@@ -76,14 +82,9 @@ def admin():
 
     return render_template('admin.html', posts=posts)  # New admin.html template required
 
-
 if __name__ == '__main__':
     # Ensure the upload folder exists
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    
-    # Create the database tables within the app context
-    with app.app_context():
-        db.create_all()
     
     # Run the application
     app.run(debug=True)

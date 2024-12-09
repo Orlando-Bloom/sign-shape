@@ -6,11 +6,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>Anonymous Posting Board
-        <a href="/new">Create New Post</a></h1>
+        
+        <h1><p><a href="/new">Submit</a><span class="dotted-underline"></span></p></h1>
         <hr>
         {% for post in posts %}
             <div class="post">
+                <p><strong>Posted by:</strong> {{ post.username }}</p> <!-- Display the username -->
                 <h2>{{ post.title }}</h2>
                 <p>{{ post.content }}</p>
                 {% if post.media %}
