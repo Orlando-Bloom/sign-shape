@@ -7,13 +7,12 @@
 <body>
     <div class="container">
         
-        <h1><p><a href="/new">Submit</a><span class="dotted-underline"></span></p></h1>
-        <hr>
+        <h1><a href="/new">Submit</a></h1>
         {% for post in posts %}
             <div class="post">
-                <p><strong>Posted by:</strong> {{ post.username }}</p> <!-- Display the username -->
-                <h2>{{ post.title }}</h2>
-                <p>{{ post.content }}</p>
+                Posted by: {{ post.username }} <!-- Display the username -->
+                
+                
                 {% if post.media %}
                     {% if post.media.endswith(('jpg', 'png', 'jpeg', 'gif')) %}
                         <img src="{{ post.media }}" alt="Post Media">
@@ -21,10 +20,15 @@
                         <video src="{{ post.media }}" controls></video>
                     {% endif %}
                 {% endif %}
+                <h1>{{ post.title }}</h1>
+                <br>
+                {{ post.content }}
+                <hr>
             </div>
         {% endfor %}
+        <hr>
         <div class="footer">
-            <p>&copy; Your submission is being considered.</p>
+            <h1>&copy; Your submission is being considered.</h1>
         </div>
     </div>
 </body>
