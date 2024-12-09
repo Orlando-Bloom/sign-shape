@@ -53,7 +53,7 @@ def new_post():
 # New Admin Route for Managing Posts
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    admin_password = "your_admin_password"  # Change this to a secure password
+    admin_password = "Iamtooc00l!"  # Change this to a secure password
 
     # Basic password protection
     if request.args.get('password') != admin_password:
