@@ -1,79 +1,83 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: 'Times New Roman', Arial, sans-serif;
-    font-size: 11px;
-    line-height: 1.5;
-    color: black;
-    background-color: rgb(151, 153, 154);
-    text-align: left;
-    padding: 10px;
-  }
-  
-  a {
-    color: rgb(0, 0, 0);
-    text-decoration: none;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
-  
-  .replies {
-    margin-left: 50px;
-  }
-  
-  .reply {
-    border: 1px dotted black;
-    margin: 5px;
-    padding: 5px;
-    background-color: rgb(151, 153, 154);
-    border-radius: 5px;
-  }
-  
-  .newReply {
-    margin: 10px 5px;
-  }
-  
-  .thread {
-    border: 2px solid black;
-    padding: 5px;
-    margin-bottom: 10px;
-    background-color: rgb(151, 153, 154);
-    border-radius: 5px;
-    overflow: hidden; /* Prevents content overflow */
-  }
-  
-  .id {
-    font-size: 10.5px;
-    color: rgb(151, 153, 154);
-  }
-  
-  #submitNewThread {
-    margin: 50px auto;
-  }
-  
-  img, video {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 10px auto; /* Centers media horizontally */
-    border: 1px solid #ccc; /* Adds a subtle border */
-    border-radius: 5px; /* Optional: rounds corners */
-  }
-  
-  .container {
-    max-width: 800px; /* Keeps content width manageable */
-    margin: 0 auto;
-    padding: 10px;
-    text-align: left; /* Aligns text to the left */
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Times New Roman', Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+  color: black;
+  background-color: rgb(151, 153, 154);
+  text-align: left;
+  padding: 10px;
+}
+
+a {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.replies {
+  margin-left: 50px;
+}
+
+.reply {
+  border: 1px dotted black;
+  margin: 5px;
+  padding: 5px;
+  background-color: rgb(151, 153, 154);
+  border-radius: 5px;
+}
+
+.newReply {
+  margin: 10px 5px;
+}
+
+.thread {
+  border: 2px solid black;
+  padding: 5px;
+  margin-bottom: 10px;
+  background-color: rgb(151, 153, 154);
+  border-radius: 5px;
+  overflow: hidden; /* Prevents content overflow */
+}
+
+.thread + .thread {
+  border-top: none; /* Avoid double borders */
+  border-bottom: 1px dotted black; /* Add dotted line between posts */
+}
+
+.id {
+  font-size: 10.5px;
+  color: rgb(151, 153, 154);
+}
+
+#submitNewThread {
+  margin: 50px auto;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 10px auto; /* Centers media horizontally */
+  border: 1px solid #ccc; /* Adds a subtle border */
+  border-radius: 5px; /* Optional: rounds corners */
+}
+
+.container {
+  max-width: 800px; /* Keeps content width manageable */
+  margin: 0 auto;
+  padding: 10px;
+  text-align: left; /* Aligns text to the left */
+  background-color: rgb(151, 153, 154);
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
