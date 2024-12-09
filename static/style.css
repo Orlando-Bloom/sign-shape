@@ -5,17 +5,17 @@
   }
   
   body {
-    font-family: 'Helvetica', Arial, sans-serif;
-    font-size: 12px;
+    font-family: 'Times New Roman', Arial, sans-serif;
+    font-size: 11px;
     line-height: 1.5;
     color: black;
-    background-color: rgb(211, 222, 227);
-    text-align: center;
+    background-color: rgb(151, 153, 154);
+    text-align: left;
     padding: 10px;
   }
   
   a {
-    color: midnightblue;
+    color: rgb(0, 0, 0);
     text-decoration: none;
   }
   
@@ -31,7 +31,7 @@
     border: 1px dotted black;
     margin: 5px;
     padding: 5px;
-    background-color: white;
+    background-color: rgb(151, 153, 154);
     border-radius: 5px;
   }
   
@@ -43,14 +43,14 @@
     border: 2px solid black;
     padding: 5px;
     margin-bottom: 10px;
-    background-color: white;
+    background-color: rgb(151, 153, 154);
     border-radius: 5px;
     overflow: hidden; /* Prevents content overflow */
   }
   
   .id {
     font-size: 10.5px;
-    color: gray;
+    color: rgb(151, 153, 154);
   }
   
   #submitNewThread {
