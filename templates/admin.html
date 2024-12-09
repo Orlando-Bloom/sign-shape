@@ -45,10 +45,12 @@
             {% if post.media %}
                 <p><strong>Media:</strong> <a href="{{ post.media }}" target="_blank">View Media</a></p>
             {% endif %}
-            <form class="delete-form" action="{{ url_for('admin') }}" method="POST">
+            <form class="delete-form" action="{{ url_for('admin', password=request.args.get('password')) }}" method="POST">
                 <input type="hidden" name="post_id" value="{{ post.id }}">
+                <input type="hidden" name="password" value="{{ request.args.get('password') }}"> <!-- Pass the password -->
                 <button class="delete-button" type="submit">Delete Post</button>
             </form>
+            
         </div>
     {% endfor %}
 </body>
