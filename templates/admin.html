@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+        }
+        .post {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .delete-form {
+            display: inline-block;
+        }
+        .delete-button {
+            color: #fff;
+            background-color: #e74c3c;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Page</h1>
+    <p>Manage posts below:</p>
+    {% for post in posts %}
+        <div class="post">
+            <p><strong>ID:</strong> {{ post.id }}</p>
+            <p><strong>Title:</strong> {{ post.title }}</p>
+            <p><strong>Content:</strong> {{ post.content }}</p>
+            {% if post.media %}
+                <p><strong>Media:</strong> <a href="{{ post.media }}" target="_blank">View Media</a></p>
+            {% endif %}
+            <form class="delete-form" action="{{ url_for('admin') }}" method="POST">
+                <input type="hidden" name="post_id" value="{{ post.id }}">
+                <button class="delete-button" type="submit">Delete Post</button>
+            </form>
+        </div>
+    {% endfor %}
+</body>
+</html>

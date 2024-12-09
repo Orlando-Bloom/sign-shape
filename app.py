@@ -50,6 +50,33 @@ def new_post():
     return render_template('post.html')
 
 
+# New Admin Route for Managing Posts
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    admin_password = "your_admin_password"  # Change this to a secure password
+
+    # Basic password protection
+    if request.args.get('password') != admin_password:
+        return "Unauthorized access", 401
+
+    # Fetch all posts for display on the admin page
+    posts = Post.query.order_by(Post.id.desc()).all()
+
+    # Handle deletion if a post ID is provided
+    if request.method == 'POST':
+        post_id = request.form.get('post_id')
+        post_to_delete = Post.query.get(post_id)
+        if post_to_delete:
+            db.session.delete(post_to_delete)
+            db.session.commit()
+            flash("Post deleted successfully!")
+        else:
+            flash("Post not found!")
+        return redirect(url_for('admin', password=admin_password))
+
+    return render_template('admin.html', posts=posts)  # New admin.html template required
+
+
 if __name__ == '__main__':
     # Ensure the upload folder exists
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -60,5 +87,3 @@ if __name__ == '__main__':
     
     # Run the application
     app.run(debug=True)
-
-
