@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Review Pending Posts</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Review Pending Posts</h1>
+        {% for post in posts %}
+            <div class="post">
+                <h2>{{ post.title }}</h2>
+                <p><strong>Posted by:</strong> {{ post.username }}</p>
+                <p>{{ post.content }}</p>
+                {% if post.media %}
+                    {% if post.media.endswith(('jpg', 'png', 'jpeg', 'gif')) %}
+                        <img src="{{ post.media }}" alt="Post Media">
+                    {% elif post.media.endswith(('mp4', 'webm', 'ogg')) %}
+                        <video src="{{ post.media }}" controls></video>
+                    {% endif %}
+                {% endif %}
+                <form method="post">
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                    <button type="submit" name="action" value="approve">Approve</button>
+                    <button type="submit" name="action" value="reject">Reject</button>
+                </form>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+</body>
+</html>

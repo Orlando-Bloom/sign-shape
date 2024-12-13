@@ -6,13 +6,22 @@
 </head>
 <body>
     <div class="container">
-        
         <h1><a href="/new">Submit</a></h1>
+        
         {% for post in posts %}
             <div class="post">
-                Posted by: {{ post.username }} <!-- Display the username -->
-                
-                
+                <p>
+                    <strong>Posted by: 
+                        {% if post.username and post.username != 'You' %}
+                            {{ post.username }}
+                        {% else %}
+                            You
+                        {% endif %}
+                    </strong>
+                </p>
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.content }}</p>
+
                 {% if post.media %}
                     {% if post.media.endswith(('jpg', 'png', 'jpeg', 'gif')) %}
                         <img src="{{ post.media }}" alt="Post Media">
@@ -20,15 +29,12 @@
                         <video src="{{ post.media }}" controls></video>
                     {% endif %}
                 {% endif %}
-                <h1>{{ post.title }}</h1>
-                <br>
-                {{ post.content }}
                 <hr>
             </div>
         {% endfor %}
-       
+        
         <div class="footer">
-            <h1>&copy; Your submission is being considered.</h1>
+            <p>All submissions should include sign shape.</p>
         </div>
     </div>
 </body>

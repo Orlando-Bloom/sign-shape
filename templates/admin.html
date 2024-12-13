@@ -3,27 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style-admin.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background-color: #C4C4C4;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 2px solid #000000;
+        }
+        .tab {
+            margin: 0 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #C4C4C4;
+            border: none;
+            border-radius: 5px;
+            font-weight: normal;
+            flex-grow: 1;
+            text-align: center;
+        }
+        .tab.active {
+            background-color: rgb(122, 122, 122);
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: #C4C4C4;
+            margin-top: 60px; /* Adjusted for fixed tabs */
+            border: 0px solid #000000;
+            border-radius: 0px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .status-pending {
+            color: yellow;
+            font-weight: bold;
+        }
+        .status-approved {
+            color: green;
+            font-weight: bold;
+        }
+        hr.dashed-line {
+            border: none;
+            border-top: 2px dashed #bbb;
+            margin: 20px 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Admin Page</h1>
-    <p>Manage posts below:</p>
-    {% for post in posts %}
-        <div class="post">
-            <p><strong>ID:</strong> {{ post.id }}</p>
-            <p><strong>Title:</strong> {{ post.title }}</p>
-            <p><strong>Content:</strong> {{ post.content }}</p>
-            {% if post.media %}
-                <p><strong>Media:</strong> <a href="{{ post.media }}" target="_blank">View Media</a></p>
-            {% endif %}
-            <form class="delete-form" action="{{ url_for('admin', password=request.args.get('password')) }}" method="POST">
-                <input type="hidden" name="post_id" value="{{ post.id }}">
-                <input type="hidden" name="password" value="{{ request.args.get('password') }}"> <!-- Pass the password -->
-                <button class="delete-button" type="submit">Delete Post</button>
-            </form>
-            
-        </div>
-    {% endfor %}
+    
+    <div class="tabs">
+        <div class="tab" data-tab="feed">Admin Feed</div>
+        <div class="tab" data-tab="create">Create Admin Post</div>
+        <div class="tab" data-tab="review">Review</div>
+    </div>
+
+    <!-- Section 1: Post Feed -->
+    <div id="feed" class="tab-content">
+        {% for post in posts %}
+            <div class="post">
+                <p><strong>Posted by:</strong> {{ post.username }}</p>
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.content }}</p>
+                {% if post.media %}
+                    {% if post.media.endswith(('jpg', 'png', 'jpeg', 'gif')) %}
+                        <img src="{{ post.media }}" alt="Post Media">
+                    {% elif post.media.endswith(('mp4', 'webm', 'ogg')) %}
+                        <video src="{{ post.media }}" controls></video>
+                    {% endif %}
+                {% endif %}
+                <p><strong>Status:</strong> 
+                    {% if post.status == 'pending' %}
+                        <span class="status-pending">Pending</span>
+                    {% elif post.status == 'approved' %}
+                        <span class="status-approved">Approved</span>
+                    {% else %}
+                        {{ post.status }}
+                    {% endif %}
+                </p>
+            </div>
+            <hr class="dashed-line">
+        {% endfor %}
+    </div>
+
+    <!-- Section 2: Post Submission -->
+    <div id="create" class="tab-content">
+        <form method="post" enctype="multipart/form-data" action="{{ url_for('admin_new_post', password=request.args.get('password')) }}">
+            <label>Username:</label>
+            <input type="text" name="username" placeholder="Enter your username" maxlength="50" required>
+
+            <label>Title:</label>
+            <input type="text" name="title" required>
+
+            <label>Content:</label>
+            <textarea name="content" required></textarea>
+
+            <label>Upload Media (optional):</label>
+            <input type="file" name="media" accept="image/*,video/*">
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Section 3: Review -->
+    <div id="review" class="tab-content">
+        {% for post in posts %}
+            <div class="post">
+                <p><strong>ID:</strong> {{ post.id }}</p>
+                <p><strong>Username:</strong> {{ post.username }}</p>
+                <p><strong>Title:</strong> {{ post.title }}</p>
+                <p><strong>Content:</strong> {{ post.content }}</p>
+                {% if post.media %}
+                    <p><strong>Media:</strong> <a href="{{ post.media }}" target="_blank">View Media</a></p>
+                {% endif %}
+                <p><strong>Status:</strong> 
+                    {% if post.status == 'pending' %}
+                        <span class="status-pending">Pending</span>
+                    {% elif post.status == 'approved' %}
+                        <span class="status-approved">Approved</span>
+                    {% else %}
+                        {{ post.status }}
+                    {% endif %}
+                </p>
+                <form action="{{ url_for('admin', password=request.args.get('password')) }}" method="POST">
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                    <input type="hidden" name="password" value="{{ request.args.get('password') }}">
+                    {% if post.status == 'pending' %}
+                        <button type="submit" name="action" value="approve">Approve</button>
+                    {% endif %}
+                    <button type="submit" name="action" value="reject">Delete</button>
+                </form>
+            </div>
+            <hr class="dashed-line">
+        {% endfor %}
+    </div>
+
+    <script>
+        // Tab navigation
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+
+                this.classList.add('active');
+                document.getElementById(this.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Activate the first tab by default
+        document.querySelector('.tab').classList.add('active');
+        document.querySelector('.tab-content').classList.add('active');
+    </script>
 </body>
 </html>
