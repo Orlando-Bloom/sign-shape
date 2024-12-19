@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
     <title>Sign Shape</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -12,13 +14,13 @@
             {% for post in posts %}
                 <div class="post">
                     <p>
-                        <strong>Posted by: 
+                        Posted by: 
                             {% if post.username and post.username != 'Anonymous' %}
                                 {{ post.username }}
                             {% else %}
                                 You
                             {% endif %}
-                        </strong>
+                        
                     </p>
                     <p>{{ post.content }}</p>
 
