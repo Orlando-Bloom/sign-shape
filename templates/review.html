@@ -9,7 +9,6 @@
         <h1>Review Pending Posts</h1>
         {% for post in posts %}
             <div class="post">
-                <h2>{{ post.title }}</h2>
                 <p><strong>Posted by:</strong> {{ post.username }}</p>
                 <p>{{ post.content }}</p>
                 {% if post.media %}

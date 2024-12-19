@@ -32,7 +32,6 @@
             font-weight: lighter;
             flex-grow: 1;
             text-align: center;
-            
         }
         .tab.active {
             background-color: rgb(122, 122, 122);
@@ -72,49 +71,40 @@
         <div class="tab" data-tab="review">Review</div>
     </div>
 
-    <!-- Section 1: Post Feed -->
+    <!-- Section 1: Admin Feed -->
     <div id="feed" class="tab-content">
         {% for post in posts %}
+            {% if post.status == 'approved' %}
             <div class="post">
-                <p><strong>Posted by:</strong> {{ post.username }}</p>
-                <h2>{{ post.title }}</h2>
-                <p>{{ post.content }}</p>
+                <p><strong>ID:</strong> {{ post.id }}</p>
+                <p><strong>Username:</strong> {{ post.username }}</p>
+                <p><strong>Content:</strong> {{ post.content }}</p>
                 {% if post.media %}
-                    {% if post.media.endswith(('jpg', 'png', 'jpeg', 'gif')) %}
-                        <img src="{{ post.media }}" alt="Post Media">
-                    {% elif post.media.endswith(('mp4', 'webm', 'ogg')) %}
-                        <video src="{{ post.media }}" controls></video>
-                    {% endif %}
+                    <p><strong>Media:</strong> <a href="{{ post.media }}" target="_blank">View Media</a></p>
                 {% endif %}
                 <p><strong>Status:</strong> 
-                    {% if post.status == 'pending' %}
-                        <span class="status-pending">Pending</span>
-                    {% elif post.status == 'approved' %}
-                        <span class="status-approved">Approved</span>
-                    {% else %}
-                        {{ post.status }}
-                    {% endif %}
+                    <span class="status-approved">Approved</span>
                 </p>
+                <form action="{{ url_for('admin', password=request.args.get('password')) }}" method="POST">
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                    <input type="hidden" name="password" value="{{ request.args.get('password') }}">
+                    <button type="submit" name="action" value="reject">Delete</button>
+                </form>
             </div>
             <hr class="dashed-line">
+            {% endif %}
         {% endfor %}
     </div>
 
-    <!-- Section 2: Post Submission -->
+    <!-- Section 2: Create Admin Post -->
     <div id="create" class="tab-content">
         <form method="post" enctype="multipart/form-data" action="{{ url_for('admin_new_post', password=request.args.get('password')) }}">
             <label>Username:</label>
             <input type="text" name="username" placeholder="Enter your username" maxlength="50" required>
-
-            <label>Title:</label>
-            <input type="text" name="title" required>
-
             <label>Content:</label>
             <textarea name="content" required></textarea>
-
             <label>Upload Media (optional):</label>
             <input type="file" name="media" accept="image/*,video/*">
-
             <button type="submit">Submit</button>
         </form>
     </div>
@@ -122,33 +112,26 @@
     <!-- Section 3: Review -->
     <div id="review" class="tab-content">
         {% for post in posts %}
+            {% if post.status == 'pending' %}
             <div class="post">
                 <p><strong>ID:</strong> {{ post.id }}</p>
                 <p><strong>Username:</strong> {{ post.username }}</p>
-                <p><strong>Title:</strong> {{ post.title }}</p>
                 <p><strong>Content:</strong> {{ post.content }}</p>
                 {% if post.media %}
                     <p><strong>Media:</strong> <a href="{{ post.media }}" target="_blank">View Media</a></p>
                 {% endif %}
                 <p><strong>Status:</strong> 
-                    {% if post.status == 'pending' %}
-                        <span class="status-pending">Pending</span>
-                    {% elif post.status == 'approved' %}
-                        <span class="status-approved">Approved</span>
-                    {% else %}
-                        {{ post.status }}
-                    {% endif %}
+                    <span class="status-pending">Pending</span>
                 </p>
-                <form action="{{ url_for('admin', password=request.args.get('password')) }}" method="POST">
+                <form action="{{ url_for('review_posts', password=request.args.get('password')) }}" method="POST">
                     <input type="hidden" name="post_id" value="{{ post.id }}">
                     <input type="hidden" name="password" value="{{ request.args.get('password') }}">
-                    {% if post.status == 'pending' %}
-                        <button type="submit" name="action" value="approve">Approve</button>
-                    {% endif %}
-                    <button type="submit" name="action" value="reject">Delete</button>
+                    <button type="submit" name="action" value="approve">Approve</button>
+                    <button type="submit" name="action" value="reject">Reject</button>
                 </form>
             </div>
             <hr class="dashed-line">
+            {% endif %}
         {% endfor %}
     </div>
 

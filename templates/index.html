@@ -8,30 +8,33 @@
     <div class="container">
         <h1><a href="/new">Submit</a></h1>
         
-        {% for post in posts %}
-            <div class="post">
-                <p>
-                    <strong>Posted by: 
-                        {% if post.username and post.username != 'You' %}
-                            {{ post.username }}
-                        {% else %}
-                            You
-                        {% endif %}
-                    </strong>
-                </p>
-                <h2>{{ post.title }}</h2>
-                <p>{{ post.content }}</p>
+        {% if posts %}
+            {% for post in posts %}
+                <div class="post">
+                    <p>
+                        <strong>Posted by: 
+                            {% if post.username and post.username != 'Anonymous' %}
+                                {{ post.username }}
+                            {% else %}
+                                You
+                            {% endif %}
+                        </strong>
+                    </p>
+                    <p>{{ post.content }}</p>
 
-                {% if post.media %}
-                    {% if post.media.endswith(('jpg', 'png', 'jpeg', 'gif')) %}
-                        <img src="{{ post.media }}" alt="Post Media">
-                    {% elif post.media.endswith(('mp4', 'webm', 'ogg')) %}
-                        <video src="{{ post.media }}" controls></video>
+                    {% if post.media %}
+                        {% if post.media.endswith(('jpg', 'png', 'jpeg', 'gif')) %}
+                            <img src="{{ post.media }}" alt="Post Media">
+                        {% elif post.media.endswith(('mp4', 'webm', 'ogg')) %}
+                            <video src="{{ post.media }}" controls></video>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-                <hr>
-            </div>
-        {% endfor %}
+                    <hr>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No approved posts available. Please check back later.</p>
+        {% endif %}
         
         <div class="footer">
         </div>

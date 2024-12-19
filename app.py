@@ -28,10 +28,19 @@ class Post(db.Model):
 # Routes
 @app.route('/')
 def index():
-    posts = Post.query.filter_by(status='approved').order_by(
+    # Query to fetch approved posts
+    posts = Post.query.filter(Post.status == 'approved').order_by(
         db.case((Post.username == 'Admin', 0), else_=1), Post.id.desc()
     ).all()
+
+    # Debugging: Log the retrieved posts
+    print("DEBUG: Approved posts retrieved for index.html:")
+    for post in posts:
+        print(f"ID: {post.id}, Content: {post.content}, Status: {post.status}")
+
     return render_template('index.html', posts=posts)
+
+
 
 @app.route('/review', methods=['GET', 'POST'])
 def review_posts():
@@ -42,22 +51,39 @@ def review_posts():
     if request.method == 'POST':
         post_id = request.form.get('post_id')
         action = request.form.get('action')  # 'approve' or 'reject'
-        post = Post.query.get(post_id)
 
-        if post:
-            if action == 'approve':
-                post.status = 'approved'
-                flash(f"Post approved successfully!")
-            elif action == 'reject':
-                db.session.delete(post)
-                flash("Post rejected and removed!")
-            db.session.commit()
-        else:
-            flash("Post not found!")
-        return redirect(url_for('review_posts', password=admin_password))
+        try:
+            post = Post.query.get(post_id)
+            if post:
+                if action == 'approve':
+                    post.status = 'approved'  # Update the status to "approved"
+                    db.session.commit()  # Commit the change to the database
+                    print(f"DEBUG: Post {post_id} approved successfully. Status: {post.status}")  # Debugging
+                    flash("Post approved successfully!")
 
+                elif action == 'reject':
+                    db.session.delete(post)  # Delete the post if rejected
+                    db.session.commit()  # Commit the deletion
+                    print(f"DEBUG: Post {post_id} rejected and removed.")  # Debugging
+                    flash("Post rejected and removed!")
+            else:
+                print(f"DEBUG: Post with ID {post_id} not found.")  # Debugging
+                flash("Post not found!")
+                
+
+        except Exception as e:
+            print(f"ERROR: An error occurred while processing post {post_id}: {e}")  # Debugging
+            flash("An error occurred while processing the post.")
+
+        return redirect(url_for('admin', password=admin_password))
+
+    # Fetch pending posts
     pending_posts = Post.query.filter_by(status='pending').all()
+    print(f"DEBUG: {len(pending_posts)} pending posts loaded for review.")  # Debugging
     return render_template('review.html', posts=pending_posts)
+
+
+
 
 @app.route('/new', methods=['GET', 'POST'])
 def new_post():
