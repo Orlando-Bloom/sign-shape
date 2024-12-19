@@ -6,7 +6,8 @@ import hashlib
 import os
 
 # App configuration
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SECRET_KEY'] = 'your_secret_key_here'
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'static/uploads')
