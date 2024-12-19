@@ -139,23 +139,42 @@
     </div>
 
     <script>
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', function () {
-            const tabId = this.dataset.tab;
-            if (tabId === 'feed' || tabId === 'review') {
-                window.location.reload(); // Reload the page for these tabs
-            } else {
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                const tabId = this.dataset.tab;
+                
+                // Check if it's the "Review" tab, reload only when clicked
+                if (tabId === 'review') {
+                    window.location.href = window.location.href.split('#')[0] + '#review';
+                    window.location.reload();
+                    return;
+                }
+                
+                // Normal tab switching behavior for other tabs
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                 document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                
                 this.classList.add('active');
                 document.getElementById(tabId).classList.add('active');
-            }
+            });
         });
-    });
-
-    // Activate the first tab by default
-    document.querySelector('.tab').classList.add('active');
-    document.querySelector('.tab-content').classList.add('active');
-</script>
+    
+        // Ensure the correct tab is active after reload
+        const currentHash = window.location.hash.substring(1);
+        if (currentHash) {
+            document.querySelectorAll('.tab').forEach(tab => {
+                const tabId = tab.dataset.tab;
+                if (tabId === currentHash) {
+                    tab.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                }
+            });
+        } else {
+            // Default behavior: activate the first tab
+            document.querySelector('.tab').classList.add('active');
+            document.querySelector('.tab-content').classList.add('active');
+        }
+    </script>
+    
 </body>
 </html>
