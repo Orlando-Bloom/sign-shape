@@ -36,7 +36,7 @@ def index():
 
 @app.route('/review', methods=['GET', 'POST'])
 def review_posts():
-    admin_password = "n^As6DMra@!jL#`=hU{3;"  # Secure admin password
+    admin_password = "Iamtooc00l!"  # Secure admin password
     if request.args.get('password') != admin_password:
         return "Unauthorized access", 401
 
