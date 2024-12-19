@@ -3,14 +3,45 @@
 <head>
     <title>Your submission is being considered.</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 18px;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #C4C4C4;
+        }
+        .container {
+            text-align: center;
+        }
+        h1 {
+            font-weight: normal;
+            margin-bottom: 10px;
+        }
+        a {
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            border-bottom: 2px dashed rgb(0, 0, 0);
+        }
+        a:hover {
+            text-decoration: underline;
+            color: #A9A9A9;
+            border-bottom: 2px dashed rgb(0, 0, 0);
+        }
+        h2 {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1><a href="/">Feed</a></h1>
-        
-        <div class="message">
-            <h2>Your submission is being considered.</h2>
-        </div>
+        Your submission is being considered.
     </div>
 </body>
 </html>

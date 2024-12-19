@@ -3,19 +3,95 @@
 <head>
     <title>Submit.</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: "Times New Roman", serif;
+            font-size: 18px;
+            background-color: #C4C4C4; /* Matches the background color in the screenshot */
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            text-align: center;
+            padding: 20px;
+            border: 0px solid black;
+            background-color: #C4C4C4;
+            border-radius: 0px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            max-width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            font-family: "Times New Roman", serif;
+            font-size: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            font-family: "Times New Roman", serif;
+            font-size: 16px;
+            color: black;
+            background-color: #C4C4C4;
+            border: 1px solid black;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 0px;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #A9A9A9;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        button {
+            font-family: "Times New Roman", serif;
+            font-size: 17px;
+            background-color: #A9A9A9;
+            border: 1px solid black;
+            padding: 5px 20px;
+            cursor: pointer;
+            border-radius: 0px;
+        }
+
+        button:hover {
+            background-color: #C4C4C4;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>All submissions must include the sign shape.</h1>
         <form method="post" enctype="multipart/form-data">
-
-            <label>Language:</label>
-            <textarea name="content" required></textarea>
-                            
-            <label>Upload Media:</label>
-            <input type="file" name="media" accept="image/*,video/*">
-            <br>
-            <button type="submit">Submit</button>
+            <textarea id="content" name="content" placeholder="Language." required></textarea>
+            <div class="form-group">
+                <label class="custom-file-upload">
+                    <input id="media" type="file" name="media" accept="image/*,video/*">
+                    Choose File
+                </label>
+                <button type="submit">Submit</button>
+            </div>
         </form>
     </div>
 </body>
