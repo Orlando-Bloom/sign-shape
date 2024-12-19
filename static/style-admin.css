@@ -28,6 +28,7 @@ h1 {
   color: #000000; /* Sets the text color */
   margin-bottom: 20px; /* Adds spacing below the heading */
   text-align: center; /* Optional: Aligns the text */
+  justify-content: center;
 }
 
 a {
