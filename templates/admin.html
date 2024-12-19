@@ -7,7 +7,7 @@
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style-admin.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
-    
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -139,20 +139,23 @@
     </div>
 
     <script>
-        // Tab navigation
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function () {
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', function () {
+            const tabId = this.dataset.tab;
+            if (tabId === 'feed' || tabId === 'review') {
+                window.location.reload(); // Reload the page for these tabs
+            } else {
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                 document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-
                 this.classList.add('active');
-                document.getElementById(this.dataset.tab).classList.add('active');
-            });
+                document.getElementById(tabId).classList.add('active');
+            }
         });
+    });
 
-        // Activate the first tab by default
-        document.querySelector('.tab').classList.add('active');
-        document.querySelector('.tab-content').classList.add('active');
-    </script>
+    // Activate the first tab by default
+    document.querySelector('.tab').classList.add('active');
+    document.querySelector('.tab-content').classList.add('active');
+</script>
 </body>
 </html>
