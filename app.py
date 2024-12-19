@@ -19,12 +19,11 @@ migrate = Migrate(app, db)
 # Database Model
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(150), nullable=False)
     content = db.Column(db.Text, nullable=False)
     media = db.Column(db.String(300), nullable=True)
     username = db.Column(db.String(50), nullable=False, default="Anonymous")
     status = db.Column(db.String(20), nullable=False, default="pending")
-    ip_address = db.Column(db.String(64), nullable=True)  # New column for hashed IP
+    ip_address = db.Column(db.String(64), nullable=True)
 
 # Routes
 @app.route('/')
@@ -48,10 +47,13 @@ def review_posts():
         if post:
             if action == 'approve':
                 post.status = 'approved'
+                flash(f"Post approved successfully!")
             elif action == 'reject':
                 db.session.delete(post)
+                flash("Post rejected and removed!")
             db.session.commit()
-            flash(f"Post {action}ed successfully!")
+        else:
+            flash("Post not found!")
         return redirect(url_for('review_posts', password=admin_password))
 
     pending_posts = Post.query.filter_by(status='pending').all()
@@ -63,7 +65,6 @@ def new_post():
         user_ip = request.remote_addr
         hashed_ip = hashlib.sha256(user_ip.encode()).hexdigest()  # Hash the IP
 
-        title = request.form['title']
         content = request.form['content']
         username = request.form.get('username', 'Anonymous')
         file = request.files.get('media')
@@ -75,10 +76,10 @@ def new_post():
         else:
             media_path = None
 
-        new_post = Post(title=title, content=content, username=username, media=media_path, ip_address=hashed_ip)
+        new_post = Post(content=content, username=username, media=media_path, ip_address=hashed_ip)
         db.session.add(new_post)
         db.session.commit()
-        flash("Post created successfully!")
+        flash("Post created successfully! Pending review.")
         return redirect(url_for('pending'))
 
     return render_template('post.html')
@@ -112,7 +113,6 @@ def admin_new_post():
     user_ip = request.remote_addr
     hashed_ip = hashlib.sha256(user_ip.encode()).hexdigest()  # Hash the IP
 
-    title = request.form['title']
     content = request.form['content']
     username = request.form.get('username', 'Admin')
     file = request.files.get('media')
@@ -124,7 +124,7 @@ def admin_new_post():
     else:
         media_path = None
 
-    new_post = Post(title=title, content=content, username=username, media=media_path, ip_address=hashed_ip, status='approved')
+    new_post = Post(content=content, username=username, media=media_path, ip_address=hashed_ip, status='approved')
     db.session.add(new_post)
     db.session.commit()
     flash("Post created and published successfully!")
