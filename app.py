@@ -10,12 +10,18 @@ app = Flask(__name__, static_folder='static')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SECRET_KEY'] = 'your_secret_key_here'
-app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'static/uploads')
+app.config['UPLOAD_FOLDER'] = '/var/data/uploads'  # Updated path for persistent storage
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # Limit uploads to 10MB
 
 # Initialize database
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+# Ensure the persistent upload directory exists
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+# Rest of the code remains unchanged
+# ... (routes and logic)
 
 # Database Model
 class Post(db.Model):
