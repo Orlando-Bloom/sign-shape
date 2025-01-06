@@ -25,9 +25,9 @@
 
                     {% if post.media %}
                         {% if post.media.endswith(('jpg', 'png', 'jpeg', 'gif')) %}
-                            <img src="{{ '/var/data/uploads/' + post.media }}" alt="Post Media"> <!-- Updated path -->
+                            <img src="{{ url_for('uploaded_file', filename=post.media.split('/')[-1]) }}" alt="Post Media"> <!-- Updated path -->
                         {% elif post.media.endswith(('mp4', 'webm', 'ogg')) %}
-                            <video src="{{ '/var/data/uploads/' + post.media }}" controls></video> <!-- Updated path -->
+                            <video src="{{ url_for('uploaded_file', filename=post.media.split('/')[-1]) }}" controls></video> <!-- Updated path -->
                         {% endif %}
                     {% endif %}
                     <hr>

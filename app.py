@@ -73,9 +73,8 @@ def new_post():
 
         if file and file.filename != '':
             filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
-            media_path = file_path
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            media_path = f"uploads/{filename}"  # Store relative path only
         else:
             media_path = None
 
@@ -86,6 +85,8 @@ def new_post():
         return redirect(url_for('pending'))
 
     return render_template('post.html')
+
+
 
 @app.route('/pending')
 def pending():

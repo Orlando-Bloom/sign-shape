@@ -81,7 +81,7 @@
                 <p><strong>Username:</strong> {{ post.username }}</p>
                 <p><strong>Content:</strong> {{ post.content }}</p>
                 {% if post.media %}
-                    <p><strong>Media:</strong> <a href="{{ '/var/data/uploads/' + post.media }}" target="_blank">View Media</a></p> <!-- Updated path -->
+                    <p><strong>Media:</strong> <a href="{{ url_for('uploaded_file', filename=post.media.split('/')[-1]) }}" target="_blank">View Media</a></p> <!-- Updated path -->
                 {% endif %}
                 <p><strong>Status:</strong> 
                     <span class="status-approved">Approved</span>
@@ -119,7 +119,7 @@
                 <p><strong>Username:</strong> {{ post.username }}</p>
                 <p><strong>Content:</strong> {{ post.content }}</p>
                 {% if post.media %}
-                    <p><strong>Media:</strong> <a href="{{ '/var/data/uploads/' + post.media }}" target="_blank">View Media</a></p> <!-- Updated path -->
+                    <p><strong>Media:</strong> <a href="{{ url_for('uploaded_file', filename=post.media.split('/')[-1]) }}" target="_blank">View Media</a></p> <!-- Updated path -->
                 {% endif %}
                 <p><strong>Status:</strong> 
                     <span class="status-pending">Pending</span>
