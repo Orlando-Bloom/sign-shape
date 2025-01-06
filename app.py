@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
@@ -9,8 +9,11 @@ import os
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SECRET_KEY'] = 'your_secret_key_here'
-app.config['UPLOAD_FOLDER'] = '/var/data/uploads'  # Updated path for SSD storage
+app.config['UPLOAD_FOLDER'] = '/var/data/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # Limit uploads to 10MB
+
+# Ensure upload directory exists
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Initialize database
 db = SQLAlchemy(app)
@@ -70,8 +73,9 @@ def new_post():
 
         if file and file.filename != '':
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            media_path = f"/static/uploads/{filename}"
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+            media_path = file_path
         else:
             media_path = None
 
@@ -118,8 +122,9 @@ def admin_new_post():
 
     if file and file.filename != '':
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        media_path = f"/static/uploads/{filename}"
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        media_path = file_path
     else:
         media_path = None
 
@@ -129,6 +134,10 @@ def admin_new_post():
     flash("Post created and published successfully!")
     return redirect(url_for('admin', password=request.args.get('password')))
 
+@app.route('/uploads/<path:filename>')
+def uploaded_file(filename):
+    # Serve files from the /var/data/uploads directory
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 if __name__ == '__main__':
-    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     app.run(debug=True)
