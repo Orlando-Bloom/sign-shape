@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
@@ -67,7 +66,6 @@
     </style>
 </head>
 <body>
-    
     <div class="tabs">
         <div class="tab" data-tab="feed">Admin Feed</div>
         <div class="tab" data-tab="create">Create Admin Post</div>
@@ -83,7 +81,7 @@
                 <p><strong>Username:</strong> {{ post.username }}</p>
                 <p><strong>Content:</strong> {{ post.content }}</p>
                 {% if post.media %}
-                    <p><strong>Media:</strong> <a href="{{ post.media }}" target="_blank">View Media</a></p>
+                    <p><strong>Media:</strong> <a href="{{ '/var/data/uploads/' + post.media }}" target="_blank">View Media</a></p> <!-- Updated path -->
                 {% endif %}
                 <p><strong>Status:</strong> 
                     <span class="status-approved">Approved</span>
@@ -121,7 +119,7 @@
                 <p><strong>Username:</strong> {{ post.username }}</p>
                 <p><strong>Content:</strong> {{ post.content }}</p>
                 {% if post.media %}
-                    <p><strong>Media:</strong> <a href="{{ post.media }}" target="_blank">View Media</a></p>
+                    <p><strong>Media:</strong> <a href="{{ '/var/data/uploads/' + post.media }}" target="_blank">View Media</a></p> <!-- Updated path -->
                 {% endif %}
                 <p><strong>Status:</strong> 
                     <span class="status-pending">Pending</span>
@@ -175,6 +173,5 @@
             document.querySelector('.tab-content').classList.add('active');
         }
     </script>
-    
 </body>
 </html>

@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-    
     <title>Sign Shape</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
@@ -27,9 +25,9 @@
 
                     {% if post.media %}
                         {% if post.media.endswith(('jpg', 'png', 'jpeg', 'gif')) %}
-                            <img src="{{ post.media }}" alt="Post Media">
+                            <img src="{{ '/var/data/uploads/' + post.media }}" alt="Post Media"> <!-- Updated path -->
                         {% elif post.media.endswith(('mp4', 'webm', 'ogg')) %}
-                            <video src="{{ post.media }}" controls></video>
+                            <video src="{{ '/var/data/uploads/' + post.media }}" controls></video> <!-- Updated path -->
                         {% endif %}
                     {% endif %}
                     <hr>
