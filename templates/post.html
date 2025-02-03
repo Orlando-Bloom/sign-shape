@@ -16,7 +16,7 @@
             margin: 0;
             font-family: "Times New Roman", serif;
             font-size: 18px;
-            background-color: #C4C4C4; /* Matches the background color in the screenshot */
+            background-color: #C4C4C4;
         }
 
         .container {
@@ -69,6 +69,12 @@
             display: none;
         }
 
+        .file-name {
+            margin-left: 10px;
+            font-size: 16px;
+            font-family: "Times New Roman", serif;
+        }
+
         button {
             font-family: "Times New Roman", serif;
             font-size: 17px;
@@ -94,9 +100,17 @@
                     <input id="media" type="file" name="media" accept="image/*,video/*">
                     Choose File
                 </label>
+                <span id="file-name" class="file-name">No file chosen</span> <!-- File name display -->
                 <button type="submit">Submit</button>
             </div>
         </form>
     </div>
+
+    <script>
+        document.getElementById("media").addEventListener("change", function(event) {
+            let fileName = event.target.files.length > 0 ? event.target.files[0].name : "No file chosen";
+            document.getElementById("file-name").textContent = fileName;
+        });
+    </script>
 </body>
 </html>
