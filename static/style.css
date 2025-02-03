@@ -139,6 +139,7 @@ button[type="submit"] {
 /* Ensure styling is consistent on mobile */
 @media (max-width: 600px) {
   button[type="submit"] {
-      color: black !important; /* Force black text on mobile */
+      color: black !important;
+      font-weight: normal !important; /* Force black text on mobile */
   }
 }
