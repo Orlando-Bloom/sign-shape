@@ -39,10 +39,11 @@
             font-size: 18px;
         }
 
+        /* Align Choose File, filename, and Submit button in one row */
         .form-group {
             display: flex;
             align-items: center;
-            justify-content: start; /* Align items to the left */
+            justify-content: flex-start;
             gap: 10px;
             margin-top: 10px;
         }
@@ -68,15 +69,15 @@
             display: none;
         }
 
+        /* Filename aligned left next to Choose File button */
         .file-name {
-        
             font-size: 16px;
             font-family: "Times New Roman", serif;
-            margin-left:10px;
             white-space: nowrap;
         }
 
-        button {
+        /* Submit button aligned in same row */
+        .submit-button {
             font-family: "Times New Roman", serif;
             font-size: 17px;
             background-color: #C4C4C4;
@@ -84,10 +85,10 @@
             padding: 5px 20px;
             cursor: pointer;
             border-radius: 0px;
-            margin-left: 10px;
+            margin-left: auto;
         }
 
-        button:hover {
+        .submit-button:hover {
             background-color: #A9A9A9;
         }
     </style>
@@ -97,13 +98,14 @@
         <h1>All submissions must include the sign shape.</h1>
         <form method="post" enctype="multipart/form-data">
             <textarea id="content" name="content" placeholder=""></textarea> <!-- No "required" attribute -->
+
             <div class="form-group">
                 <label class="custom-file-upload">
                     <input id="media" type="file" name="media" accept="image/*,video/*">
                     Choose File
                 </label>
-                <span id="file-name" class="file-name">No file chosen</span> <!-- Aligned Right -->
-                <button type="submit">Submit</button>
+                <span id="file-name" class="file-name">No file chosen</span> <!-- Filename aligned left -->
+                <button type="submit" class="submit-button">Submit</button> <!-- Submit aligned in same row -->
             </div>
         </form>
     </div>

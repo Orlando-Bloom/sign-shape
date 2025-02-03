@@ -20,8 +20,8 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # Admin credentials
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "password123"  # Change this to a secure password
+ADMIN_USERNAME = "orlandobloom"
+ADMIN_PASSWORD = "sign-shape-xxx!"  # Change this to a secure password
 
 # Database Model
 class Post(db.Model):
