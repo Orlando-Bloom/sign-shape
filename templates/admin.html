@@ -6,6 +6,7 @@
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style-admin.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+    <title>SIGN SHAPE</title>
 
     <style>
         body {
@@ -13,7 +14,7 @@
         }
         .tabs {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             background-color: #C4C4C4;
             padding: 10px;
             position: fixed;
@@ -71,7 +72,7 @@
         <div class="tab" data-tab="create">Create Admin Post</div>
         <div class="tab" data-tab="review">Review</div>
     </div>
-
+    <a href="{{ url_for('admin_logout') }}" class="logout-btn">Logout</a> <!-- Added Logout Button -->
     <!-- Section 1: Admin Feed -->
     <div id="feed" class="tab-content">
         {% for post in posts %}

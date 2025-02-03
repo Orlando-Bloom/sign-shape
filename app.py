@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
@@ -19,6 +19,10 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+# Admin credentials
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "password123"  # Change this to a secure password
+
 # Database Model
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -38,9 +42,8 @@ def index():
 
 @app.route('/review', methods=['GET', 'POST'])
 def review_posts():
-    admin_password = "Iamtooc00l!"  # Secure admin password
-    if request.args.get('password') != admin_password:
-        return "Unauthorized access", 401
+    if 'admin' not in session:
+        return redirect(url_for('admin_login'))
 
     if request.method == 'POST':
         post_id = request.form.get('post_id')
@@ -56,7 +59,7 @@ def review_posts():
                 db.session.delete(post)  # Delete the post if rejected
                 db.session.commit()      # Commit the deletion
                 flash("Post rejected and removed!")
-        return redirect(url_for('admin', password=admin_password))
+        return redirect(url_for('admin'))
 
     pending_posts = Post.query.filter_by(status='pending').all()
     return render_template('review.html', posts=pending_posts)
@@ -86,17 +89,14 @@ def new_post():
 
     return render_template('post.html')
 
-
-
 @app.route('/pending')
 def pending():
     return render_template('pending.html')
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    admin_password = "Iamtooc00l!"  # Secure admin password
-    if request.args.get('password') != admin_password:
-        return "Unauthorized access", 401
+    if 'admin' not in session:
+        return redirect(url_for('admin_login'))
 
     posts = Post.query.order_by(Post.id.desc()).all()
     if request.method == 'POST':
@@ -108,12 +108,15 @@ def admin():
             flash("Post deleted successfully!")
         else:
             flash("Post not found!")
-        return redirect(url_for('admin', password=admin_password))
+        return redirect(url_for('admin'))
 
     return render_template('admin.html', posts=posts)
 
 @app.route('/admin/new', methods=['POST'])
 def admin_new_post():
+    if 'admin' not in session:
+        return redirect(url_for('admin_login'))
+
     user_ip = request.remote_addr
     hashed_ip = hashlib.sha256(user_ip.encode()).hexdigest()  # Hash the IP
 
@@ -133,12 +136,35 @@ def admin_new_post():
     db.session.add(new_post)
     db.session.commit()
     flash("Post created and published successfully!")
-    return redirect(url_for('admin', password=request.args.get('password')))
+    return redirect(url_for('admin'))
 
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
     # Serve files from the /var/data/uploads directory
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+# Admin Login Route
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session['admin'] = True
+            flash("Login successful!")
+            return redirect(url_for('admin'))
+        else:
+            flash("Invalid credentials. Please try again.")
+
+    return render_template('admin_login.html')
+
+# Admin Logout Route
+@app.route('/admin/logout')
+def admin_logout():
+    session.pop('admin', None)
+    flash("You have been logged out.")
+    return redirect(url_for('admin_login'))
 
 if __name__ == '__main__':
     app.run(debug=True)

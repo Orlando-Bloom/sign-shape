@@ -17,7 +17,7 @@ body {
 
 .dashed-line {
   border: none;
-  border-top: 2px dashed black;
+  border-top: 0px dashed black;
   margin: 20px 0;
 }
 
@@ -68,7 +68,7 @@ hr {
 }
 
 .post img {
-  border: 2px dashed black; /* Adds a dashed border around images */
+  border: 2px solid black; /* Adds a dashed border around images */
   padding: 5px; /* Adds space inside the border */
   border-radius: 0px; /* Optional: Rounds the corners of the image */
   background-color: #A9A9A9; /* Optional: Adds a subtle background color */

@@ -4,7 +4,7 @@
 
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
 
-    <title>Submit.</title>
+    <title>SIGN SHAPE</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
     <style>
@@ -72,7 +72,7 @@
         button {
             font-family: "Times New Roman", serif;
             font-size: 17px;
-            background-color: #A9A9A9;
+            background-color: #C4C4C4;
             border: 1px solid black;
             padding: 5px 20px;
             cursor: pointer;
@@ -80,7 +80,7 @@
         }
 
         button:hover {
-            background-color: #C4C4C4;
+            background-color: #A9A9A9;
         }
     </style>
 </head>
@@ -88,7 +88,7 @@
     <div class="container">
         <h1>All submissions must include the sign shape.</h1>
         <form method="post" enctype="multipart/form-data">
-            <textarea id="content" name="content" placeholder="Language." required></textarea>
+            <textarea id="content" name="content" placeholder="" required></textarea>
             <div class="form-group">
                 <label class="custom-file-upload">
                     <input id="media" type="file" name="media" accept="image/*,video/*">
