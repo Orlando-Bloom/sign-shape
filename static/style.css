@@ -119,3 +119,24 @@ img, video {
   background-color: #C4C4C4;
   border: none; /* Removed any unintended border */
 }
+
+/* Ensure Submit button has black text on all devices */
+button[type="submit"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #000;
+  padding: 10px;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 12px;
+  background-color: #ffffff;
+  color: black; /* Ensures black text */
+  cursor: pointer;
+}
+
+/* Ensure styling is consistent on mobile */
+@media (max-width: 600px) {
+  button[type="submit"] {
+      color: black !important; /* Force black text on mobile */
+  }
+}
