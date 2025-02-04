@@ -13,6 +13,7 @@ body {
   background-color: #C4C4C4;
   text-align: center;
   padding: 10px;
+  
 }
 
 h1 {
@@ -64,22 +65,21 @@ hr {
 }
 
 .post img {
-  border: 2px dashed black; /* Adds a dashed border around images */
-  padding: 5px; /* Adds space inside the border */
+  border: 0px solid black; 
+  padding: 0px; /* Adds space inside the border */
   border-radius: 0px; /* Optional: Rounds the corners of the image */
-  background-color: #A9A9A9; /* Optional: Adds a subtle background color */
+  background-color: #C4C4C4; /* Optional: Adds a subtle background color */
   display: block; /* Ensures proper alignment */
-  margin: 10px auto; /* Centers the image */
   align: left;
 }
 
 .post video {
-  border: 2px dashed black; /* Adds a dashed border around videos */
-  padding: 5px; /* Adds space inside the border */
+  border: 0px solid black; /* Adds a dashed border around videos */
+  padding: 0px; /* Adds space inside the border */
   border-radius: 0px; /* Optional: Rounds the corners of the video */
-  background-color: rgb(107, 107, 107); /* Optional: Adds a subtle background color */
+  background-color: #C4C4C4; /* Optional: Adds a subtle background color */
   display: block; /* Ensures proper alignment */
-  margin: 10px auto; /* Centers the video */
+  align: left;
 }
 
 
@@ -108,7 +108,7 @@ img, video {
   max-width: 100%;
   height: auto;
   display: block;
-  margin: 10px auto; /* Centers media horizontally */
+  margin: 0px; /* Centers media horizontally */
   border: none; /* Ensure no border is applied */
 }
 
