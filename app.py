@@ -70,25 +70,23 @@ def new_post():
         user_ip = request.remote_addr
         hashed_ip = hashlib.sha256(user_ip.encode()).hexdigest()  # Hash the IP
 
-        content = request.form.get('content', '').strip()
-        username = request.form.get('username', 'Anonymous')
+        content = request.form.get('content', '')  # Text is optional
         file = request.files.get('media')
 
-        # Ensure at least an image OR text is submitted
-        if not content and not file:
-            flash("Error: You must submit either an image or text!")
-            return redirect(url_for('new_post'))
-
-        # Handle file upload if exists
-        media_path = None
-        if file and file.filename != '':
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            media_path = f"static/uploads/{filename}"
-
-        new_post = Post(content=content, username=username, media=media_path, ip_address=hashed_ip)
+        if not file or file.filename == '':  # Ensure an image is required
+            flash("An image file is required to submit a post.")
+            return redirect(url_for('new_post'))  # Redirect back to form
+        
+        # Secure filename and save image
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        media_path = f"static/uploads/{filename}"  # Adjust this if using Render SSD
+        
+        # Save post to database
+        new_post = Post(content=content, username="Anonymous", media=media_path, ip_address=hashed_ip, status="pending")
         db.session.add(new_post)
         db.session.commit()
+
         flash("Post created successfully! Pending review.")
         return redirect(url_for('pending'))
 
