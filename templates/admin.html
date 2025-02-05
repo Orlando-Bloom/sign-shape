@@ -10,7 +10,8 @@
 
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 16px;
         }
         .tabs {
             display: flex;
@@ -99,17 +100,18 @@
     </div>
 
     <!-- Section 2: Create Admin Post -->
-    <div id="create" class="tab-content">
-        <form method="post" enctype="multipart/form-data" action="{{ url_for('admin_new_post', password=request.args.get('password')) }}">
-            <label>Username:</label>
-            <input type="text" name="username" placeholder="Enter your username" maxlength="50" required>
-            <label>Content:</label>
-            <textarea name="content" required></textarea>
-            <label>Upload Media (optional):</label>
-            <input type="file" name="media" accept="image/*,video/*">
-            <button type="submit">Submit</button>
-        </form>
-    </div>
+<div id="create" class="tab-content">
+    <form method="post" enctype="multipart/form-data" action="{{ url_for('admin_new_post', password=request.args.get('password')) }}">
+        <label>Username:</label>
+        <input type="text" name="username" placeholder="Enter your username" maxlength="50" required>
+        <label>Content (Optional):</label>
+        <textarea name="content"></textarea> <!-- Removed required attribute -->
+        <label>Upload Media (Required):</label>
+        <input type="file" name="media" accept="image/*,video/*" required> <!-- Added required attribute -->
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
 
     <!-- Section 3: Review -->
     <div id="review" class="tab-content">

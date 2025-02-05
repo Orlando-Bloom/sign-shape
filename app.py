@@ -123,23 +123,26 @@ def admin_new_post():
     user_ip = request.remote_addr
     hashed_ip = hashlib.sha256(user_ip.encode()).hexdigest()  # Hash the IP
 
-    content = request.form['content']
-    username = request.form.get('username', 'Admin')
+    content = request.form.get('content', '')  # Text is optional
     file = request.files.get('media')
 
-    if file and file.filename != '':
-        filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        media_path = file_path
-    else:
-        media_path = None
+    if not file or file.filename.strip() == '':  # Ensure an image is required
+        flash("An image file is required to submit a post.")
+        return redirect(url_for('admin', password=request.args.get('password')))  # Redirect back to form
 
-    new_post = Post(content=content, username=username, media=media_path, ip_address=hashed_ip, status='approved')
+    # Secure filename and save image
+    filename = secure_filename(file.filename)
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file.save(file_path)
+    media_path = f"/var/data/uploads/{filename}"  # Ensure correct storage path
+
+    new_post = Post(content=content, username="Admin", media=media_path, ip_address=hashed_ip, status='approved')
     db.session.add(new_post)
     db.session.commit()
+    
     flash("Post created and published successfully!")
-    return redirect(url_for('admin'))
+    return redirect(url_for('admin', password=request.args.get('password')))
+
 
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):

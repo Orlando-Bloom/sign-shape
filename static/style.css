@@ -6,7 +6,7 @@
 
 body {
   font-family: 'Times New Roman', Times, serif;
-  font-size: 18px;
+  font-size: 18px !important;
   font-weight: lighter;
   line-height: 1.5;
   color: black;
@@ -19,7 +19,7 @@ body {
 h1 {
   font-family: 'Times New Roman', Times, serif; /* Specifies the font */
   font-weight: lighter;
-  font-size: 18px; /* Sets the font size */
+  font-size: 18px !important; /* Sets the font size */
   color: #000000; /* Sets the text color */
   margin-bottom: 20px; /* Adds spacing below the heading */
   text-align: center; /* Optional: Aligns the text */
@@ -30,12 +30,12 @@ a {
   text-decoration: underline;
   text-decoration-style: dashed; /* Makes the underline dashed */
   text-underline-offset: 4px; /* Adds spacing between text and underline */
-  font-size: 18px;
+  font-size: 18px !important;
 }
 
 a:hover {
   color: #A9A9A9; /* Optional: Change the color on hover */
-  font-size: 18px;
+  font-size: 18px !important;
 }
 
 hr {
