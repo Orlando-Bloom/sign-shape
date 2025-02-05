@@ -78,6 +78,12 @@
             font-size: 16px;
             font-family: "Times New Roman", serif;
             white-space: nowrap;
+            max-width: 200px; /* Adjust width as necessary */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; /* Truncate long filenames with '...' */
+            display: inline-block;
+            vertical-align: middle;
         }
 
         /* Submit button aligned in same row */
@@ -105,6 +111,13 @@
             margin-left: auto;
             color:black;
         }
+
+        .file-upload-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
     </style>
 </head>
 <body>
