@@ -140,6 +140,7 @@ def admin_new_post():
     db.session.add(new_post)
     db.session.commit()
     
+    
     flash("Post created and published successfully!")
     return redirect(url_for('admin', password=request.args.get('password')))
 
