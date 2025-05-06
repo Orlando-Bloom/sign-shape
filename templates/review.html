@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SIGN SHAPE</title>
+    <title>Review Posts</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -11,8 +11,7 @@
         <div class="post">
             <p>{{ post.content }}</p>
             {% if post.media %}
-                <!-- Corrected media linking -->
-                <img src="{{ url_for('uploaded_file', filename=post.media.split('/')[-1]) }}" alt="Post Media">
+                <img src="{{ post.media }}" alt="Post Media">
             {% endif %}
             <form method="post" action="">
                 <input type="hidden" name="post_id" value="{{ post.id }}">
