@@ -4,24 +4,32 @@ from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
 import hashlib
 import os
+import boto3
 
 # App configuration
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SECRET_KEY'] = 'your_secret_key_here'
-app.config['UPLOAD_FOLDER'] = '/var/data/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # Limit uploads to 10MB
-
-# Ensure upload directory exists
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-
-# Initialize database
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
 # Admin credentials
 ADMIN_USERNAME = "orlandobloom"
 ADMIN_PASSWORD = "sign-shape-xxx!"
+
+# S3 Configuration
+S3_BUCKET = os.environ.get("AWS_S3_BUCKET")
+S3_REGION = os.environ.get("AWS_S3_REGION")
+S3_ENDPOINT = os.environ.get("AWS_S3_ENDPOINT_URL")
+s3 = boto3.client(
+    "s3",
+    aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
+    endpoint_url=S3_ENDPOINT
+)
+
+# Initialize database
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # Database Model
 class Post(db.Model):
@@ -73,16 +81,15 @@ def new_post():
         content = request.form.get('content', '')
         file = request.files.get('media')
 
-        if not file or file.filename == '':
+        if not file or file.filename.strip() == '':
             flash("An image file is required to submit a post.")
             return redirect(url_for('new_post'))
 
         filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        media_path = url_for('uploaded_file', filename=filename)
+        s3.upload_fileobj(file, S3_BUCKET, filename)
+        media_url = f"{S3_ENDPOINT}/{S3_BUCKET}/{filename}"
 
-        new_post = Post(content=content, username="Anonymous", media=media_path, ip_address=hashed_ip, status="pending")
+        new_post = Post(content=content, username="Anonymous", media=media_url, ip_address=hashed_ip, status="pending")
         db.session.add(new_post)
         db.session.commit()
 
@@ -130,21 +137,15 @@ def admin_new_post():
         return redirect(url_for('admin'))
 
     filename = secure_filename(file.filename)
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(file_path)
-    media_path = url_for('uploaded_file', filename=filename)
+    s3.upload_fileobj(file, S3_BUCKET, filename)
+    media_url = f"{S3_ENDPOINT}/{S3_BUCKET}/{filename}"
 
-    new_post = Post(content=content, username="Admin", media=media_path, ip_address=hashed_ip, status='approved')
+    new_post = Post(content=content, username="Admin", media=media_url, ip_address=hashed_ip, status='approved')
     db.session.add(new_post)
     db.session.commit()
 
     flash("Post created and published successfully!")
     return redirect(url_for('admin'))
-
-# Serve files from /var/data/uploads via public route
-@app.route('/uploads/<path:filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
