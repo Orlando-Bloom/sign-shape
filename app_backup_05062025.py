@@ -21,7 +21,7 @@ migrate = Migrate(app, db)
 
 # Admin credentials
 ADMIN_USERNAME = "orlandobloom"
-ADMIN_PASSWORD = "sign-shape-xxx!"
+ADMIN_PASSWORD = "sign-shape-xxx!"  # Change this to a secure password
 
 # Database Model
 class Post(db.Model):
@@ -47,17 +47,17 @@ def review_posts():
 
     if request.method == 'POST':
         post_id = request.form.get('post_id')
-        action = request.form.get('action')
+        action = request.form.get('action')  # 'approve' or 'reject'
         post = Post.query.get(post_id)
 
         if post:
             if action == 'approve':
-                post.status = 'approved'
-                db.session.commit()
+                post.status = 'approved'  # Update the status to "approved"
+                db.session.commit()      # Commit the change to the database
                 flash("Post approved successfully!")
             elif action == 'reject':
-                db.session.delete(post)
-                db.session.commit()
+                db.session.delete(post)  # Delete the post if rejected
+                db.session.commit()      # Commit the deletion
                 flash("Post rejected and removed!")
         return redirect(url_for('admin'))
 
@@ -68,20 +68,21 @@ def review_posts():
 def new_post():
     if request.method == 'POST':
         user_ip = request.remote_addr
-        hashed_ip = hashlib.sha256(user_ip.encode()).hexdigest()
+        hashed_ip = hashlib.sha256(user_ip.encode()).hexdigest()  # Hash the IP
 
-        content = request.form.get('content', '')
+        content = request.form.get('content', '')  # Text is optional
         file = request.files.get('media')
 
-        if not file or file.filename == '':
+        if not file or file.filename == '':  # Ensure an image is required
             flash("An image file is required to submit a post.")
-            return redirect(url_for('new_post'))
-
+            return redirect(url_for('new_post'))  # Redirect back to form
+        
+        # Secure filename and save image
         filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        media_path = url_for('uploaded_file', filename=filename)
-
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        media_path = f"static/uploads/{filename}"  # Adjust this if using Render SSD
+        
+        # Save post to database
         new_post = Post(content=content, username="Anonymous", media=media_path, ip_address=hashed_ip, status="pending")
         db.session.add(new_post)
         db.session.commit()
@@ -120,32 +121,36 @@ def admin_new_post():
         return redirect(url_for('admin_login'))
 
     user_ip = request.remote_addr
-    hashed_ip = hashlib.sha256(user_ip.encode()).hexdigest()
+    hashed_ip = hashlib.sha256(user_ip.encode()).hexdigest()  # Hash the IP
 
-    content = request.form.get('content', '')
+    content = request.form.get('content', '')  # Text is optional
     file = request.files.get('media')
 
-    if not file or file.filename.strip() == '':
+    if not file or file.filename.strip() == '':  # Ensure an image is required
         flash("An image file is required to submit a post.")
-        return redirect(url_for('admin'))
+        return redirect(url_for('admin', password=request.args.get('password')))  # Redirect back to form
 
+    # Secure filename and save image
     filename = secure_filename(file.filename)
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     file.save(file_path)
-    media_path = url_for('uploaded_file', filename=filename)
+    media_path = f"/var/data/uploads/{filename}"  # Ensure correct storage path
 
     new_post = Post(content=content, username="Admin", media=media_path, ip_address=hashed_ip, status='approved')
     db.session.add(new_post)
     db.session.commit()
-
+    
+    
     flash("Post created and published successfully!")
-    return redirect(url_for('admin'))
+    return redirect(url_for('admin', password=request.args.get('password')))
 
-# Serve files from /var/data/uploads via public route
+
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
+    # Serve files from the /var/data/uploads directory
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
+# Admin Login Route
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
@@ -158,8 +163,10 @@ def admin_login():
             return redirect(url_for('admin'))
         else:
             flash("Invalid credentials. Please try again.")
+
     return render_template('admin_login.html')
 
+# Admin Logout Route
 @app.route('/admin/logout')
 def admin_logout():
     session.pop('admin', None)
