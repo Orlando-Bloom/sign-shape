@@ -18,14 +18,18 @@ ADMIN_PASSWORD = "sign-shape-xxx!"
 
 # S3 Configuration
 S3_BUCKET = os.environ.get("AWS_S3_BUCKET")
-S3_REGION = os.environ.get("AWS_S3_REGION")
 S3_ENDPOINT = os.environ.get("AWS_S3_ENDPOINT_URL")
+
+if not all([S3_BUCKET, S3_ENDPOINT]):
+    raise ValueError("Missing S3 configuration in environment variables.")
+
 s3 = boto3.client(
     "s3",
     aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
     aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
     endpoint_url=S3_ENDPOINT
 )
+
 
 # Initialize database
 db = SQLAlchemy(app)
