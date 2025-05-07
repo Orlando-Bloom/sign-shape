@@ -27,17 +27,16 @@ S3_ENDPOINT = os.environ.get("AWS_S3_ENDPOINT_URL")
 if not all([S3_BUCKET, S3_ENDPOINT]):
     raise ValueError("Missing S3 configuration in environment variables.")
 
+from botocore.config import Config
+
 s3 = boto3.client(
     "s3",
     region_name=os.environ.get("AWS_S3_REGION"),
     endpoint_url=os.environ.get("AWS_S3_ENDPOINT_URL"),
     aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
     aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
-    config=Config(s3={'addressing_style': 'path'})  # <-- Force path-style URLs
+    config=Config(s3={'addressing_style': 'path'})  # key fix!
 )
-
-
-
 
 # Initialize database
 db = SQLAlchemy(app)
