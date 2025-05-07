@@ -6,6 +6,9 @@ import hashlib
 import os
 import boto3
 
+print("AWS KEY:", os.environ.get("AWS_ACCESS_KEY_ID"))
+print("BUCKET:", os.environ.get("AWS_S3_BUCKET"))
+
 # App configuration
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
