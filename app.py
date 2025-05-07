@@ -2,10 +2,10 @@ from flask import Flask, render_template, request, redirect, url_for, flash, sen
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
-from botocore.config import Config
 import hashlib
 import os
 import boto3
+from botocore.config import Config
 
 print("AWS KEY:", os.environ.get("AWS_ACCESS_KEY_ID"))
 print("BUCKET:", os.environ.get("AWS_S3_BUCKET"))
@@ -26,8 +26,6 @@ S3_ENDPOINT = os.environ.get("AWS_S3_ENDPOINT_URL")
 
 if not all([S3_BUCKET, S3_ENDPOINT]):
     raise ValueError("Missing S3 configuration in environment variables.")
-
-from botocore.config import Config
 
 s3 = boto3.client(
     "s3",
