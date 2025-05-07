@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, sen
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from werkzeug.utils import secure_filename
+from botocore.config import Config
 import hashlib
 import os
 import boto3
@@ -27,11 +28,14 @@ if not all([S3_BUCKET, S3_ENDPOINT]):
     raise ValueError("Missing S3 configuration in environment variables.")
 
 s3 = boto3.client(
-    's3',
-    aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-    aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
-    endpoint_url=os.environ.get('AWS_S3_ENDPOINT_URL')
+    "s3",
+    region_name=os.environ.get("AWS_S3_REGION"),
+    endpoint_url=os.environ.get("AWS_S3_ENDPOINT_URL"),
+    aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
+    config=Config(s3={'addressing_style': 'path'})  # <-- Force path-style URLs
 )
+
 
 
 
